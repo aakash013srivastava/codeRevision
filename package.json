@@ -1,15 +1,43 @@
 {
   "name": "node2",
   "version": "1.0.0",
-  "description": "test app with bootstrap",
+  "description": "codeRevision app for maintaining source code revision history ",
   "main": "index.js",
-  "scripts": {
-    "test": "npm start"
-  },
-  "author": "aakash",
-  "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "mysql": "2.13.0"
-  }
+    "body-parser": "^1.16.1",
+    "bootstrap": "^3.3.7",
+    "cookieparser": "^0.1.0",
+    "connect-flash": "^0.1.1",
+    "ejs": "^2.5.5",
+    "express": "^4.14.1",
+    "express-session": "^1.15.1",
+    "express-validator": "^3.1.2",
+    "jquery": "^3.1.1",
+    "express-handlebars": "^3.0.0",
+    "mongoose": "^4.8.2",
+    "mongodb": "^2.2.24",
+    "mysql": "^2.13.0",
+    "nodemailer": "^3.1.1",
+    "passport": "^0.3.2",
+    "passport-http": "^0.3.0",
+    "passport-local": "^1.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aakash013srivastava/codeRevision.git"
+  },
+  "keywords": [
+    "codeRevision"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aakash013srivastava/codeRevision/issues"
+  },
+  "homepage": "https://github.com/aakash013srivastava/codeRevision#readme"
 }
