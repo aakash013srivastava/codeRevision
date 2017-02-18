@@ -14,7 +14,7 @@
 	</head>
 	<body>
 	
-	<div class="jumbotron" style="height:150px;padding:10"><h1><b><%= title%></b></h1></br>
+	<div class="jumbotron" style="height:150px;padding:10"><h2><b><%= title%></b></h2></br>
 	<div class="navbar-header">
 	
 	<a href="/">Index</a>&nbsp;&nbsp;
@@ -22,6 +22,7 @@
 	<a href="contact">Contact</a>&nbsp;&nbsp;
 	<%if(sessions!=''){%>
 	<a href="logout">Logout</a>&nbsp;&nbsp;
+	<a href="myrep">My Repository</a>&nbsp;&nbsp;
 	<%}else{%>
 	<a href="login">Login</a>&nbsp;&nbsp;
 	<a href="register">Register</a>&nbsp;&nbsp;

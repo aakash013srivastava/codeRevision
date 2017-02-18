@@ -14,32 +14,53 @@
 	</head>
 	<body>
 	
-	<div class="jumbotron" style="height:150px;padding:10"><h1><b><%= title%></b></h1></br>
-	<div class="navbar-header">
+	<div class="jumbotron" style="height:150px;padding:10"><h2><b><%= title%></b></h2></br>
+		<div class="navbar-header">
 	
-	<a href="/">Index</a>&nbsp;&nbsp;
-	<a href="about">About</a>&nbsp;&nbsp;
-	<a href="contact">Contact</a>&nbsp;&nbsp;
-	<%if(sessions!=''){ %>
-	<a href="logout">Logout</a>&nbsp;&nbsp;
-	<%}else{%>
-	<a href="login">Login</a>&nbsp;&nbsp;
-	<a href="register">Register</a>&nbsp;&nbsp;
-	<%}%>
+		<a href="/">Index</a>&nbsp;&nbsp;
+		<a href="about">About</a>&nbsp;&nbsp;
+		<a href="contact">Contact</a>&nbsp;&nbsp;
+		<%if(sessions!=''){ %>
+		<a href="logout">Logout</a>&nbsp;&nbsp;
+		<a href="myrep">My Repository</a>&nbsp;&nbsp;
+		<%}else{%>
+		<a href="login">Login</a>&nbsp;&nbsp;
+		<a href="register">Register</a>&nbsp;&nbsp;
+		<%}%>
 
-	</div>
+		</div>
 	</div>
 	
-	
+
 	<br/><br/><br/>
-	<form method="POST" id="registration_form" action="/formfill" >
-		<table>
-		<tr><td>Email:</td><td><input type="email" name="email" id="email" required/></td></tr>
-		<tr><td>Password:</td><td><input type="password" name="password" id="password" required/></td></tr>
-		<tr><td>Confirm Password:</td><td><input type="password" name="cpassword" id="cpassword" required/></td></tr>
-		<tr><td><input type="Submit" class="btn btn-default" id="Submit"/></td></tr>
-		</table>
-	</form>
+	<form method="POST" id="registration_form" action="/formfill"  >
 	
+	<div class="form-group">
+		<label for="email">Email:</label><br/>
+		<input type="email" name="email" id="email" required/>
+	</div>
+	
+	<div class="form-group">
+		<label for="password">Password:</label><br/>
+		<input type="password" name="password" id="password" pattern="[a-zA-Z0-9]{8,12}" title="8 to 12 chars,alphabets capital and small with digits" required="required"/>
+	</div>
+	
+	<div class="form-group">
+		<label for="cpassword">Confirm Password:</label><br/>
+		<input type="password" name="cpassword" id="cpassword" oninput="check(this)" pattern="[a-zA-Z0-9]{8,12}" title="8 to 12 chars,alphabets capital and small with digits" required="required"/>
+	</div>
+
+	<input type="Submit" class="btn btn-default" id="Submit"/></td></tr>
+	
+	</form>
+		<script>
+		function check(input){
+			var len = input.length;
+			if(input.value != document.getElementById('password').value)
+			{
+				input.setCustomValidity('Password and confirm password not same!');
+			}
+		}
+		</script>
 	</body>
 </html>
