@@ -15,23 +15,27 @@
 <!-- Include header using JQuery -->	
 	</head>
 	<body>
-	<div class="jumbotron" style="height:150px;padding:10"><h2><b><%= title%></b></h2></br>
-	<div class="navbar-header">
+<div class="jumbotron" style="height:125px;padding:10"><h2><b><%= title%></b></h2></br>
+	<div id="header">
 	
-	<a href="/">Index</a>&nbsp;&nbsp;
-	<a href="about">About</a>&nbsp;&nbsp;
-	<a href="contact">Contact</a>&nbsp;&nbsp;
-	<%if(sessions!=null && sessions!=""){%>
-	<a href="logout">Logout<%=sessions%></a>&nbsp;&nbsp;
-	<a href="myrep">My Repository</a>&nbsp;&nbsp;
-	<%}else{%>
-	<a href="login">Login</a>&nbsp;&nbsp;
-	<a href="register">Register</a>&nbsp;&nbsp;
-	<%}%>
+		<a href="/">Index</a>&nbsp;&nbsp;
+		<a href="about">About</a>&nbsp;&nbsp;
+		<a href="contact">Contact</a>&nbsp;&nbsp;
+		<%if(sessions!=''){%>
+		<a href="logout">Logout</a>&nbsp;&nbsp;
+		<a href="myrep">My Repository</a>&nbsp;&nbsp;
+		<%}else{%>
+		<a href="login">Login</a>&nbsp;&nbsp;
+		<a href="register">Register</a>&nbsp;&nbsp;
+		<%}%>
 	
-
 	</div>
 	</div>
+	<div id="sidebar" style="float:right;width:200px;position:relative">
+		<h3></h3>
+	</div>
+	<div id="content" style="margin-top:50px">
+	
 	
 	<form method="POST" id="login_form" action="/login">
 		<div class="form-group">
@@ -48,5 +52,6 @@
 			<input type="Submit" class="btn btn-default" id="Submit"/>
 		</div>
 	</form>
+	</div>	
 	</body>
 </html>

@@ -14,25 +14,30 @@
 	</head>
 	<body>
 	
-	<div class="jumbotron" style="height:150px;padding:10"><h2><b><%= title%></b></h2></br>
-		<div class="navbar-header">
+	<div class="jumbotron" style="height:125px;padding:10"><h2><b><%= title%></b></h2></br>
+	<div id="header">
 	
 		<a href="/">Index</a>&nbsp;&nbsp;
 		<a href="about">About</a>&nbsp;&nbsp;
 		<a href="contact">Contact</a>&nbsp;&nbsp;
-		<%if(sessions!=''){ %>
+		<%if(sessions!=''){%>
 		<a href="logout">Logout</a>&nbsp;&nbsp;
 		<a href="myrep">My Repository</a>&nbsp;&nbsp;
 		<%}else{%>
 		<a href="login">Login</a>&nbsp;&nbsp;
 		<a href="register">Register</a>&nbsp;&nbsp;
 		<%}%>
-
-		</div>
+	
 	</div>
+	</div>
+	<div id="sidebar" style="float:right;width:200px;position:relative">
+		<h3></h3>
+	</div>
+	<div id="content" style="margin-top:50px">
+	
 	
 
-	<br/><br/><br/>
+	
 	<form method="POST" id="registration_form" action="/formfill"  >
 	
 	<div class="form-group">
@@ -42,23 +47,27 @@
 	
 	<div class="form-group">
 		<label for="password">Password:</label><br/>
-		<input type="password" name="password" id="password" pattern="[a-zA-Z0-9]{8,12}" title="8 to 12 chars,alphabets capital and small with digits" required="required"/>
+		<input type="password" name="password" id="password" pattern="[a-zA-Z0-9]{8,12}" title="8 to 12 chars,alphabets capital/small with digits" required="required"/>
 	</div>
 	
 	<div class="form-group">
 		<label for="cpassword">Confirm Password:</label><br/>
-		<input type="password" name="cpassword" id="cpassword" oninput="check(this)" pattern="[a-zA-Z0-9]{8,12}" title="8 to 12 chars,alphabets capital and small with digits" required="required"/>
+		<input type="password" name="cpassword" id="cpassword" pattern="[a-zA-Z0-9]{8,12}" onfocusout="check(this)" title="8 to 12 chars,alphabets capital/small with digits" required="required"/>
 	</div>
 
 	<input type="Submit" class="btn btn-default" id="Submit"/></td></tr>
 	
 	</form>
-		<script>
-		function check(input){
-			var len = input.length;
-			if(input.value != document.getElementById('password').value)
+</div>	
+	<script>
+		function check(){
+			
+			if(document.getElementById('cpassword').value != document.getElementById('password').value)
 			{
-				input.setCustomValidity('Password and confirm password not same!');
+				alert('Password and confirm password not same!');
+			}
+			else{
+				document.registration_form.submit();
 			}
 		}
 		</script>
