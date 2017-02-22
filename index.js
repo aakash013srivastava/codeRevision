@@ -5,6 +5,7 @@ var cookieParser = require('cookieParser');
 var path = require('path');
 var bcryptjs = require('bcryptjs');
 var db = require('./db');	
+var multer = require('multer');
 
 var session = require('express-session');
 var smtpTransport = require('nodemailer-smtp-transport');
@@ -173,6 +174,47 @@ app.get('/myrep',function(req,res){
 	else{
 		res.render('myrep',{title:'My Repository',sessions:sess.email});
 	}
+});
+
+// Multer repo file upload
+var storage = multer.diskStorage({
+  destination: function (request, file, callback) {
+    callback(null, '.\\uploads);
+  },
+  filename: function (request, file, callback) {
+    console.log(file);
+    callback(null, file.originalname)
+  }
+});
+
+var upload = multer({storage:storage}).array('upload',20);
+
+app.post('/repoUpload', function(request, response) {
+  upload(request, response, function(err) {
+    if(err) {
+      console.log('Error Occurred');
+	  console.log(err);
+      return;
+    }
+    // request.files is an object where field name is the key and value is the array of files 
+    console.log(request.files);
+    //response.end('Your Files Uploaded');
+    console.log('Files Uploaded');
+  })
+});
+
+
+app.get('/repoUpload',function(req,res){
+	var sess = req.session;
+	if(!sess.email)
+	{
+		res.render('login',{title : 'Login',sessions:sess.email});
+	}
+	else
+	{
+		res.render('myrep',{title : 'Upload your code!',sessions:''});
+	}
+
 });
 
 app.listen(3000,function(){
