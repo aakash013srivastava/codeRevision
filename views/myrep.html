@@ -27,11 +27,17 @@
 	
 	</div>
 	</div>
-	<div id="sidebar" style="float:right;width:200px;position:relative">
-		<h3>Add a new Repo</h3>
+	<div id="sidebar" style="float:right;width:200px;border-left:thin solid #D3D3D3;position:relative;padding-left:10px">
+		<h4><i>Add a new Repo</i></h4>
+		<form enctype="multipart/form-data" action="/repoUpload" method="post">
+		  <input type="file" name="upload" multiple /><br/>
+		  <input type="submit" value="Upload !" name="submit" />
+		</form>
+		
 	</div>
 	<div id="content" style="margin-top:50px">
 	<p>Welcome, contribute to your code repositories OR add more !!!  </p>
 	</div>
 	</body>
+	 
 </html>
