@@ -6,6 +6,7 @@ var path = require('path');
 var bcryptjs = require('bcryptjs');
 var db = require('./db');	
 var multer = require('multer');
+var mkdirp = require('mkdirp');
 
 var session = require('express-session');
 var smtpTransport = require('nodemailer-smtp-transport');
@@ -21,6 +22,10 @@ app.set('view engine', 'html');
 app.use(session({secret: 'ssshhhhh',resave: true, saveUninitialized: true }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+//Set global variables used across different requests
+
+var uploads,storage;
 
 
 app.get('/',function(req,res){
@@ -114,6 +119,7 @@ app.post('/formfill', function (req, res) {
 	else{
 		db.query('INSERT INTO users SET ?',row, function(err_in, row_in, result_in) {
 			console.log("user "+row.email+" created");
+			mkdirp('./uploads/'+row.email+'_uploads');
 			res.render('login',{title : 'Login page',sessions:''});
 		});
 	}
@@ -152,6 +158,20 @@ app.post('/login',function(req,res){
 			sess.email = email;
 			res.render('index',{title:'Index',sessions:sess.email});
 			console.log("user logged in!");
+
+			// Set Multer repo file upload settings, upon user login (Storage upload folder based on user login)
+			storage = multer.diskStorage({
+			  destination: function (request, file, callback) {
+				callback(null, './uploads/'+row[0].email+'_uploads');
+			  },
+			  filename: function (request, file, callback) {
+				console.log(file);
+				callback(null, file.originalname)
+			  }
+			});
+
+			upload = multer({storage:storage}).array('upload',20);
+
 		}
 		else
 		{
@@ -176,20 +196,9 @@ app.get('/myrep',function(req,res){
 	}
 });
 
-// Multer repo file upload
-var storage = multer.diskStorage({
-  destination: function (request, file, callback) {
-    callback(null, '.\\uploads);
-  },
-  filename: function (request, file, callback) {
-    console.log(file);
-    callback(null, file.originalname)
-  }
-});
-
-var upload = multer({storage:storage}).array('upload',20);
 
 app.post('/repoUpload', function(request, response) {
+  var sess = req.session;
   upload(request, response, function(err) {
     if(err) {
       console.log('Error Occurred');
