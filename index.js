@@ -8,6 +8,8 @@ var db = require('./db');
 var multer = require('multer');
 var mkdirp = require('mkdirp');
 
+var upload,storage;
+
 var session = require('express-session');
 var smtpTransport = require('nodemailer-smtp-transport');
 var ejs  = require('ejs');
@@ -25,7 +27,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 //Set global variables used across different requests
 
-var uploads,storage;
+
 
 
 app.get('/',function(req,res){
@@ -161,16 +163,22 @@ app.post('/login',function(req,res){
 
 			// Set Multer repo file upload settings, upon user login (Storage upload folder based on user login)
 			storage = multer.diskStorage({
-			  destination: function (request, file, callback) {
-				callback(null, './uploads/'+row[0].email+'_uploads');
-			  },
-			  filename: function (request, file, callback) {
-				console.log(file);
-				callback(null, file.originalname)
-			  }
-			});
-
-			upload = multer({storage:storage}).array('upload',20);
+				  destination: function (request, file, callback) {
+					callback(null, './uploads/'+row[0].email+'_uploads');
+				  },
+				  filename: function (request, file, callback) {
+					console.log(file);
+					callback(null, file.originalname)
+				  },
+				  fileFilter : function(request, file,callback){
+					  if(file.filename === 'node_modules'){
+						  return callback(null,false,new Error('Cannot upload plugins folder!'));
+					  }
+					  callback(null,true);
+				  }
+				});
+				
+				upload = multer({storage:storage}).array('upload',100);
 
 		}
 		else
@@ -184,10 +192,16 @@ app.post('/login',function(req,res){
 		
 });
 
+//Setting up the multer api settings
+		
+		//upload = ;
+
+
 // Get request for the My repository page
 
 app.get('/myrep',function(req,res){
 	var sess = req.session;
+	
 	if(!sess.email){
 		res.render('login',{title:'Login',sessions:''});
 	}
@@ -197,19 +211,14 @@ app.get('/myrep',function(req,res){
 });
 
 
-app.post('/repoUpload', function(request, response) {
-  var sess = req.session;
-  upload(request, response, function(err) {
-    if(err) {
-      console.log('Error Occurred');
-	  console.log(err);
-      return;
-    }
-    // request.files is an object where field name is the key and value is the array of files 
-    console.log(request.files);
-    //response.end('Your Files Uploaded');
-    console.log('Files Uploaded');
-  })
+app.post('/repoUpload',function(request, response) {
+  var sess = request.session;
+  upload(request,response,function(err){
+		if(err)
+			console.log("Error = "+err);
+		else
+			console.log("No Error!");
+  });
 });
 
 
