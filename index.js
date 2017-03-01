@@ -1,20 +1,23 @@
 var express = require('express');
 var mysql=require('mysql');
-var bodyParser = require('body-parser');
+
 var cookieParser = require('cookieParser');
 var path = require('path');
 var bcryptjs = require('bcryptjs');
 var db = require('./db');	
 var multer = require('multer');
 var mkdirp = require('mkdirp');
-
-var upload,storage;
+var fs = require('fs');
+var upload = multer();
+var storage;
 
 var session = require('express-session');
-var smtpTransport = require('nodemailer-smtp-transport');
 var ejs  = require('ejs');
-
+//Set global variables used across different requests
+var bodyParser = require('body-parser');
 var app = new express();
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -22,10 +25,13 @@ app.engine('html', ejs.renderFile);
 app.set('view engine', 'html');
 
 app.use(session({secret: 'ssshhhhh',resave: true, saveUninitialized: true }));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 
-//Set global variables used across different requests
+
+
+
+app.listen(3000,function(){
+	console.log('Listening on port 3000');
+});
 
 
 
@@ -161,30 +167,13 @@ app.post('/login',function(req,res){
 			res.render('index',{title:'Index',sessions:sess.email});
 			console.log("user logged in!");
 
-			// Set Multer repo file upload settings, upon user login (Storage upload folder based on user login)
-			storage = multer.diskStorage({
-				  destination: function (request, file, callback) {
-					callback(null, './uploads/'+row[0].email+'_uploads');
-				  },
-				  filename: function (request, file, callback) {
-					console.log(file);
-					callback(null, file.originalname)
-				  },
-				  fileFilter : function(request, file,callback){
-					  if(file.filename === 'node_modules'){
-						  return callback(null,false,new Error('Cannot upload plugins folder!'));
-					  }
-					  callback(null,true);
-				  }
-				});
-				
-				upload = multer({storage:storage}).array('upload',100);
+			
 
 		}
 		else
 		{
 			console.log("Wrong username and password!");
-			res.render('index',{title:'Wrong username and password',sessions:''});
+			res.render('login',{title:'Wrong username and password',sessions:''});
 		}
 	}
 		
@@ -213,12 +202,28 @@ app.get('/myrep',function(req,res){
 
 app.post('/repoUpload',function(request, response) {
   var sess = request.session;
-  upload(request,response,function(err){
-		if(err)
-			console.log("Error = "+err);
-		else
-			console.log("No Error!");
-  });
+//  console.log(request.get('content-type'));
+
+// Set Multer repo file upload settings, upon user login (Storage upload folder based on user login)
+		storage = multer.diskStorage({
+			  destination: './uploads/'+sess.email+'_uploads/'+request.body.repo_name,
+			  filename: function (request, file, callback) {
+				console.log(file);
+				callback(null, file.originalname)
+			  }
+			});
+			
+		upload = multer({storage:storage}).array('upload',100);
+		
+		console.log(request.form);
+		  
+		 upload(request,response,function(err){
+			if(err)
+				console.log("Error = "+err);
+			else
+			{console.log(request.body); // form variables eg request.body accessible here
+			console.log(request.form);}
+		});
 });
 
 
@@ -233,9 +238,5 @@ app.get('/repoUpload',function(req,res){
 		res.render('myrep',{title : 'Upload your code!',sessions:''});
 	}
 
-});
-
-app.listen(3000,function(){
-	console.log('Listening on port 3000');
 });
 
