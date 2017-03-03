@@ -134,12 +134,6 @@ app.post('/formfill', function (req, res) {
 });
 });
 
-/*------------------Routing Started ------------------------*/
-	
-
-// Confirmation of email verification
-
-
 // login form post
 
 app.post('/login',function(req,res){
@@ -166,9 +160,6 @@ app.post('/login',function(req,res){
 			sess.email = email;
 			res.render('index',{title:'Index',sessions:sess.email});
 			console.log("user logged in!");
-
-			
-
 		}
 		else
 		{
@@ -181,9 +172,6 @@ app.post('/login',function(req,res){
 		
 });
 
-//Setting up the multer api settings
-		
-		//upload = ;
 
 
 // Get request for the My repository page
@@ -191,52 +179,16 @@ app.post('/login',function(req,res){
 app.get('/myrep',function(req,res){
 	var sess = req.session;
 	
+	
 	if(!sess.email){
 		res.render('login',{title:'Login',sessions:''});
 	}
 	else{
+		
 		res.render('myrep',{title:'My Repository',sessions:sess.email});
 	}
 });
 
 
-app.post('/repoUpload',function(request, response) {
-  var sess = request.session;
-//  console.log(request.get('content-type'));
 
-// Set Multer repo file upload settings, upon user login (Storage upload folder based on user login)
-		storage = multer.diskStorage({
-			  destination: './uploads/'+sess.email+'_uploads/'+request.body.repo_name,
-			  filename: function (request, file, callback) {
-				console.log(file);
-				callback(null, file.originalname)
-			  }
-			});
-			
-		upload = multer({storage:storage}).array('upload',100);
-		
-		console.log(request.form);
-		  
-		 upload(request,response,function(err){
-			if(err)
-				console.log("Error = "+err);
-			else
-			{console.log(request.body); // form variables eg request.body accessible here
-			console.log(request.form);}
-		});
-});
-
-
-app.get('/repoUpload',function(req,res){
-	var sess = req.session;
-	if(!sess.email)
-	{
-		res.render('login',{title : 'Login',sessions:sess.email});
-	}
-	else
-	{
-		res.render('myrep',{title : 'Upload your code!',sessions:''});
-	}
-
-});
 
