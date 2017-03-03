@@ -6,9 +6,8 @@
 
 <!-- jQuery library -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
 <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-<script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>  
+
 
 
 <!-- Latest compiled JavaScript -->
@@ -31,18 +30,32 @@
 	
 	</div>
 	</div>
-	<div id="sidebar" style="float:right;width:250px;border-left:thin solid #D3D3D3;position:relative;padding-left:10px">
-		<h4><i>Add a new Repo</i></h4>
-		<form enctype="multipart/form-data" action="/repoUpload" method="post">
-		  <input type = "text" name = "repo_name" placeholder="Repo name here!" required/><br/><br/>
-		  <input type = "file" name="upload" multiple /><br/>
-		  <input type="submit" value="Upload !" name="submit" />
-		</form>
-		
-	</div>
+	
 	<div id="content" style="margin-top:50px">
 	<p>Welcome, contribute to your code repositories OR add more !!!  </p>
+	<form style="width=50%">
+	
+	<input type="email" id="mail" name="email" required/><br/>
+	<input type="Button" id="b1" name="submit" value="Get repos!"/>
+	</form>
+	<table id="t1" border="1" class="table table-striped" style="width=50%">
+		<thead>
+		<th>Repo ID</th><th>Repo Name</th><th>Created Date</th><th>Updated Date</th>
+		</thead>
+		<tbody id="appendText">
+		</tbody>
+	</table>
 	</div>
+	<script>
+		$('#b1').click(function(){
+		var repo_email = $('#mail').val();
+		$.getJSON('https://api.github.com/users/'+repo_email+'/repos',function(dat){
+		for(var ind=0;ind<dat.length;ind++){
+			$('#appendText').append('<tr><td>'+(dat[ind].id)+'</td><td>'+(dat[ind].name)+'</td><td>'+(dat[ind].created_at)+'</td><td>'+(dat[ind].updated_at)+'</td></tr>');
+		}
+		});
+		});
+	</script>​
 	</body>
 	 
 </html>
